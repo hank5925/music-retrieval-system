@@ -1,0 +1,48 @@
+# System Description
+
+## Overview
+
+Given an audio clip (say 5-10 seconds) or text, the system would tell the user if there is a match or not in the database.
+The database consists of tens of to millions of songs, both the raw audio data and the description are stored.
+Desktop application.
+
+## Detail
+
+We apply Model-View-Controller (MVC) structure to our system.
+
+__Database__ as model
+```
+id: data identifier
+music: original audio
+meta description: song, album, artist[performer, composor, studio, ...], genre, year, [...]
+audio description: length, tempo, loudness, time signature, mode and scale, instrumentation, [...]
+audio description (frame): MFCC (or similar), loudness, chord and pitch, [...]
+```
+
+__User Interface__ as view
+```
+_upload music_: analyze music and get description, save the music and description into **Database**, tell **User Interface** we’re done.
+_query by audio_: analyze music and get description, compare description with description in **Database**, return result to **User Interface**.
+_query by text_: compare text with description in **Database**, return result to **User Interface**
+_result_: music, description, (more actions applying to the result)
+_play audio_: as the name suggested.
+```
+
+__Algorithms__ as controller
+```
+_analyze music_:
+* input = audio clip / music. Might have different file format, different sample rate, different bit depth, mono/stereo, etc.
+* output = formatted description
+
+_save music and description_:
+* input = music
+* output = none, but music and its description are stored in **Database**
+
+_text compare_:
+* input = text
+* output = T/F or list of ranking, with corresponding music
+
+_description compare_:
+* input = description
+* output = T/F or list of ranking, with corresponding music
+```
